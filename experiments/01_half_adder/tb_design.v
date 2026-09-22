@@ -16,6 +16,9 @@ module tb_design;
     );
 
     initial begin
+        $dumpfile("01_half_adder.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         for (i = 0; i < 4; i = i + 1) begin
             {a, b} = i[1:0];

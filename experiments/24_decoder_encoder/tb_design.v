@@ -48,6 +48,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("24_decoder_encoder.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         en = 1;
 

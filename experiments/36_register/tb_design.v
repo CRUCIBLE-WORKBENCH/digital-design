@@ -22,6 +22,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("36_register.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1; load = 0; d = 8'h00;
         #1; check(8'h00); // async reset

@@ -33,6 +33,9 @@ task check;
 endtask
 
 initial begin
+        $dumpfile("51_debouncer.vcd");
+        $dumpvars(0, tb_design);
+
     clk = 0;
     rst = 1;
     btn_in = 0;

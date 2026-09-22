@@ -37,6 +37,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("29_parity_generator.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         // Even parity generation

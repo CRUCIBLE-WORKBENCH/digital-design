@@ -13,6 +13,9 @@ module tb_design;
     full_adder dut (.a(a), .b(b), .cin(cin), .sum(sum), .carry(carry));
 
     initial begin
+        $dumpfile("02_half_full_adder.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         for (i = 0; i < 8; i = i + 1) begin
             {a, b, cin} = i[2:0];

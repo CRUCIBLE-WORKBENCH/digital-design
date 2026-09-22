@@ -34,6 +34,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("08_adder_subtractor_4bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         run_case(4'b0011, 4'b0001, 1'b0);

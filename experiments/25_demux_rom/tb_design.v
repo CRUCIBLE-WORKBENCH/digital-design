@@ -41,6 +41,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("25_demux_rom.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         rom_pattern[0] = 4'h1;
         rom_pattern[1] = 4'h3;

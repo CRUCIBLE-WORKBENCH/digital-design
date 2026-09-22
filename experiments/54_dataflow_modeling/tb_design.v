@@ -27,6 +27,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("54_dataflow_modeling.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd5;  b = 4'd3;  #10 check;

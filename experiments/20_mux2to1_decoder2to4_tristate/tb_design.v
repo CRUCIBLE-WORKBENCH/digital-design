@@ -22,6 +22,9 @@ module tb_design;
     tristate_buffer tri_dut (.a(t_a), .en(t_en), .y(t_y));
 
     initial begin
+        $dumpfile("20_mux2to1_decoder2to4_tristate.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         $display("---- mux2to1 ----");

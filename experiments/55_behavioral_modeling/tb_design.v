@@ -33,6 +33,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("55_behavioral_modeling.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         transitions = 0;
         clk = 0; rst = 1;

@@ -36,6 +36,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("15_multiplier_comparator.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd3;  b = 4'd4;  #10 check;

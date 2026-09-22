@@ -33,6 +33,9 @@ module tb_design;
     end
 
     initial begin
+        $dumpfile("09_pipelined_adder_8bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0;
         a = 0; b = 0; cin = 0;

@@ -21,6 +21,9 @@ module tb_design;
     always #5 clk = ~clk;
 
     initial begin
+        $dumpfile("59_rtl_design_example.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1;
 

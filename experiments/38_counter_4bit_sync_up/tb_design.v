@@ -22,6 +22,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("38_counter_4bit_sync_up.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1; en = 0;
         expected = 4'd0;

@@ -27,6 +27,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("40_counter_4bit_up_down.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1; updown = 1; en = 0;
 

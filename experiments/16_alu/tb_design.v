@@ -24,6 +24,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("16_alu.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd3; b = 4'd4; opcode = 3'b000; expected = 4'd7;  check; // ADD

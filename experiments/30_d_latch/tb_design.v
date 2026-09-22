@@ -22,6 +22,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("30_d_latch.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         en = 0; d = 0; #5;

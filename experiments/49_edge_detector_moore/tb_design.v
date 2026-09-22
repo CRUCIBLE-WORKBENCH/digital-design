@@ -38,6 +38,9 @@ always @(posedge clk) begin
 end
 
 initial begin
+        $dumpfile("49_edge_detector_moore.vcd");
+        $dumpvars(0, tb_design);
+
     clk = 0;
     rst = 1;
     sig_in = 0;

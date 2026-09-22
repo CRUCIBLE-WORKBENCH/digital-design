@@ -30,6 +30,9 @@ module tb_design;
     always #5 clk = ~clk;
 
     initial begin
+        $dumpfile("37_dflipflop_shiftreg8bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         clk_ff = 0;

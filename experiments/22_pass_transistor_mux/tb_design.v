@@ -20,6 +20,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("22_pass_transistor_mux.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 0; b = 1; sel = 0; check(1'b0); // y=a

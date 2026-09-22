@@ -36,6 +36,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("17_arithmetic_adder_subtractor_comparator.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         // Addition tests (mode=00)

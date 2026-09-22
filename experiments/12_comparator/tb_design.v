@@ -20,6 +20,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("12_comparator.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd5; b = 4'd3; check;  // a>b

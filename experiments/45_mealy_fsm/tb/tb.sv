@@ -4,6 +4,9 @@ module tb;
   mealy_1011 dut(.clk(clk), .rst_n(rst_n), .din(din), .detected(detected));
   always #5 clk = ~clk;
   initial begin
+        $dumpfile("45_mealy_fsm.vcd");
+        $dumpvars(0, tb);
+
     repeat (2) @(posedge clk); rst_n = 1;
     for (int i=11; i>=0; i--) begin
       din = stream[i]; #1; if (detected) hits++; @(posedge clk);

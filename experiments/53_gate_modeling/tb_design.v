@@ -29,6 +29,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("53_gate_modeling.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         for (i = 0; i < 4; i = i + 1) begin
             {a, b} = i[1:0];

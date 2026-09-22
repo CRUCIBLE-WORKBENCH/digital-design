@@ -21,6 +21,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("33_d_flipflop_negedge.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1; d = 0;
 
