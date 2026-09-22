@@ -13,24 +13,24 @@ Experiments come in three shapes. Check which one you have with `ls`.
 
 ```bash
 cd 01_half_adder
-iverilog -o sim.vvp design.v tb_design.v
-vvp sim.vvp
+igny run iverilog -o sim.vvp design.v tb_design.v
+igny run vvp sim.vvp
 ```
 
 **2. `src/` + `tb/` + `Makefile`** — multi-language (Verilog, SystemVerilog, VHDL).
 
 ```bash
 cd 27_seven_segment_decoder
-make test          # iverilog sim, plus a GHDL syntax pass if ghdl is installed
-make clean
+igny run make test          # iverilog sim, plus a GHDL syntax pass if ghdl is installed
+igny run make clean
 ```
 
 **3. `<name>.v` + `<name>_tb.v`** — named-module walkthrough experiments.
 
 ```bash
 cd 34_d_flipflop_with_qbar
-iverilog -o sim.vvp dff.v dff_tb.v
-vvp sim.vvp
+igny run iverilog -o sim.vvp dff.v dff_tb.v
+igny run vvp sim.vvp
 ```
 
 Under Crucible, prefix with `igny run` (`igny run iverilog ...`, `igny run vvp ...`) or
@@ -53,7 +53,7 @@ igny run script run_experiments.py -- --keep   # via igny
 Then open a waveform:
 
 ```bash
-gtkwave 01_half_adder.vcd
+igny run gtkwave 01_half_adder.vcd
 igny run gtkwave 56_inverter_behavioral/56_inverter_behavioral.vcd
 ```
 
@@ -67,7 +67,7 @@ the hierarchy, maps it to generic cells, and reports gate/wire stats — a quick
 
 ```bash
 cd 01_half_adder
-yosys -s yosys_synthesis.tcl
+igny run yosys -s yosys_synthesis.tcl
 ```
 
 This writes a `synth_<top_module>.v` netlist alongside the source. A few
@@ -103,6 +103,7 @@ One-time tool setup (installs the tools and binds them to your environment):
 ```bash
 igny tool install iverilog
 igny tool install yosys --version 0.47.0   # only needed for --synth
+igny tool install openroad                 # only needed for STA (experiment 61)
 ```
 
 Pin yosys to `0.47.0` on Windows — the catalog's newer default has no
@@ -239,7 +240,7 @@ a gate-level netlist:
 
 ```bash
 cd 60_synthesis_yosys_counter
-yosys -s yosys_commands.tcl        # writes synth_example.v
+igny run yosys -s yosys_commands.tcl        # writes synth_example.v
 ```
 
 `NangateOpenCellLibrary_typical.lib` (6.7 MB) is committed so the flow runs out of the box;
@@ -250,17 +251,23 @@ This experiment also has a `yosys_synthesis.tcl` alongside `yosys_commands.tcl` 
 that one is the plain lib-free generic-cell check (against `Mycounter.v`), separate
 from the Nangate-mapped ASIC flow above.
 
-**`61_static_timing_analysis`** runs timing analysis over `top.v` against `top.sdc`:
+**`61_static_timing_analysis`** runs timing analysis over `top.v` against `top.sdc` using OpenROAD:
 
 ```bash
 cd 61_static_timing_analysis
-sta test.tcl
+igny run openroad -exit test.tcl
 ```
 
 `top.v` here is already a gate-level netlist built from named library cells (`INV`,
 `BUF`, `NAND2`, `DFFRNQ`) that only `toy.lib` defines — there's no RTL to
 re-synthesize. Its `yosys_synthesis.tcl` just parses the netlist and reports cell
 counts rather than running a full synth pass.
+
+**Required tool for STA:** Install OpenROAD with:
+
+```bash
+igny tool install openroad
+```
 
 ## Documents
 
