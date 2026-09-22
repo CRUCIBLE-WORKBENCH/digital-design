@@ -37,6 +37,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("31_latch_and_flipflop.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 0; j = 0; k = 0;
 

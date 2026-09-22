@@ -9,6 +9,9 @@ module tb_design;
     mux8to1 dut(.in(in), .sel(sel), .y(y));
 
     initial begin
+        $dumpfile("18_mux_8to1.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         in = 8'b10110010;
 

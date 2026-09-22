@@ -24,6 +24,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("05_ripple_carry_adder.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd3;  b = 4'd4;  cin = 0; #10 check;

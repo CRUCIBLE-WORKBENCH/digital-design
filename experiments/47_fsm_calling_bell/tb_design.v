@@ -46,6 +46,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("47_fsm_calling_bell.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0;
         button = 0;

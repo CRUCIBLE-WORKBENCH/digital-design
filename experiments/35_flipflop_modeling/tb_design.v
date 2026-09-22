@@ -47,6 +47,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("35_flipflop_modeling.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1;
         s = 0; r = 0; j = 0; k = 0; t = 0; d = 0;

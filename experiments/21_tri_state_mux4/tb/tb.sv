@@ -3,6 +3,9 @@ module tb;
   logic [7:0] exp [0:3];
   tri_state_mux4 dut(.en(en), .sel(sel), .d0(d0), .d1(d1), .d2(d2), .d3(d3), .y(y));
   initial begin
+        $dumpfile("21_tri_state_mux4.vcd");
+        $dumpvars(0, tb);
+
     exp[0]=d0; exp[1]=d1; exp[2]=d2; exp[3]=d3;
     en=0; sel=0; #1; assert(y === 8'hzz) else $fatal(1, "expected z");
     en=1;

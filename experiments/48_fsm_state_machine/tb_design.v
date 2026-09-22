@@ -19,6 +19,9 @@ module tb_design;
     always #5 clk = ~clk;
 
     initial begin
+        $dumpfile("48_fsm_state_machine.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0; rst = 1; din = 0;
 

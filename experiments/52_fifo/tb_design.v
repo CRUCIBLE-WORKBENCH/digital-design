@@ -56,6 +56,9 @@ task check_byte;
 endtask
 
 initial begin
+        $dumpfile("52_fifo.vcd");
+        $dumpvars(0, tb_design);
+
     clk = 0;
     rst = 1;
     wr_en = 0;

@@ -24,6 +24,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("32_d_flipflop_async_reset.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         clk = 0;
         d   = 0;

@@ -67,6 +67,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("23_mux_encoder_decoder.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         // mux4to1: all sel values, in pattern selects bit

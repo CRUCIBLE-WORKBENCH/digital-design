@@ -19,6 +19,9 @@ module tb_design;
     );
 
     initial begin
+        $dumpfile("04_full_adder_2bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         for (i = 0; i < 16; i = i + 1) begin
             {a, b, cin} = i[4:0];

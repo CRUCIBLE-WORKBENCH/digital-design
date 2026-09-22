@@ -15,6 +15,9 @@ module tb_design;
     );
 
     initial begin
+        $dumpfile("26_bcd_encoder_10bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         for (i = 0; i < 10; i = i + 1) begin

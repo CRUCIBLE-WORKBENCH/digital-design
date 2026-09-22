@@ -32,6 +32,9 @@ task check;
 endtask
 
 initial begin
+        $dumpfile("39_counter_8bit_enable.vcd");
+        $dumpvars(0, tb_design);
+
     clk = 0;
     rst = 1;
     en = 0;

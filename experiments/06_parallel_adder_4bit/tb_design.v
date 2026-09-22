@@ -31,6 +31,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("06_parallel_adder_4bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         run_case(4'b0000, 4'b0000, 1'b0);

@@ -20,6 +20,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("56_inverter_behavioral.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         in = 8'b00000000; check;

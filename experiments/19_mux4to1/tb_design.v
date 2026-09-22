@@ -13,6 +13,9 @@ module tb_design;
     mux4to1 dut (.in(in), .sel(sel), .y(y));
 
     initial begin
+        $dumpfile("19_mux4to1.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
         in = 4'b1010;
 

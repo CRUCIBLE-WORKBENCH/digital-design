@@ -28,6 +28,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("07_parallel_adder_subtractor.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd5; b = 4'd3; sub = 0; #10 check; // add

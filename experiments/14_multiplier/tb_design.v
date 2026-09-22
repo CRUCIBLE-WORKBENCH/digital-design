@@ -22,6 +22,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("14_multiplier.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 4'd0;  b = 4'd0;  check;

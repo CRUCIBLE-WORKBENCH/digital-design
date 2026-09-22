@@ -24,6 +24,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("03_adder_circuit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         a = 8'd0;   b = 8'd0;   cin = 0; #10 check;

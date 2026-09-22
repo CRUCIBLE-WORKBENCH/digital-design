@@ -31,6 +31,9 @@ module tb_design;
     endtask
 
     initial begin
+        $dumpfile("13_comparator_3bit.vcd");
+        $dumpvars(0, tb_design);
+
         errors = 0;
 
         check(3'd5, 3'd2); // gt
