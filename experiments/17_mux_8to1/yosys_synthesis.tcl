@@ -1,0 +1,23 @@
+# ===============================================================================
+# Ignytion IO - CRUCIBLE CORE
+# Copyright (c) 2026 Ignytion IO. All rights reserved.
+# Author      : IGNYTION_TECH
+# File        : experiments/17_mux_8to1/yosys_synthesis.tcl
+# Created     : 2026-09-23
+# Description : Digital design experiment source, configuration, or documentation file.
+# ===============================================================================
+
+# Auto-generated Yosys synthesis check for 17_mux_8to1
+# Reads the RTL, elaborates the hierarchy, maps to generic cells, and reports stats.
+# Run from inside this experiment's directory:
+#   yosys -s yosys_synthesis.tcl
+
+read_verilog design.v
+hierarchy -check -top mux8to1
+proc
+opt
+techmap
+opt
+clean
+stat
+write_verilog -noattr synth_mux8to1.v

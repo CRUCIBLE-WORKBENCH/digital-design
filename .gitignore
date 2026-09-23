@@ -15,9 +15,10 @@ run_log.txt
 err.txt
 verr.txt
 
-# Crucible workspace state
-crucible.toml
-crucible.lock
+# Crucible workspace state is intentionally committed so `igny workspace sync`
+# reproduces the exact toolchain:
+#   crucible.toml  - workspace identity + bound environment
+#   crucible.lock  - pinned tool versions with checksums
 
 # Python/cache files
 __pycache__/

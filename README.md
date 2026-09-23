@@ -1,14 +1,12 @@
 # Verilog Experiments
 
-55 self-contained digital design experiments, from single gates to a full
-synthesis-and-timing flow. Numbering is thematic: combinational arithmetic first,
-then data routing, sequential logic, state machines, memory, modeling styles, and
-finally the RTL-to-netlist flow.
+54 self-contained digital design experiments, numbered `01`–`54`, from single
+gates to a full RTL-to-netlist synthesis flow. Numbering is thematic:
+combinational arithmetic first, then data routing, sequential logic, state
+machines, memory, modeling styles, and finally the synthesis flow.
 
 Everything here is plain Verilog (`.v`) simulated with Icarus Verilog, plus a
-Yosys `.tcl` synthesis check per experiment. Numbering has gaps where earlier
-SystemVerilog/VHDL experiments were removed; remaining experiments keep their
-original numbers.
+Yosys `.tcl` synthesis check per experiment.
 
 ## Two layouts, two ways to run
 
@@ -25,7 +23,7 @@ igny run vvp sim.vvp
 **2. `<name>.v` + `<name>_tb.v`** — named-module walkthrough experiments.
 
 ```bash
-cd experiments/34_d_flipflop_with_qbar
+cd experiments/31_d_flipflop_with_qbar
 igny run iverilog -o sim.vvp dff.v dff_tb.v
 igny run vvp sim.vvp
 ```
@@ -43,7 +41,7 @@ design. `igny run` launches the tool in your current directory.
 
 Every testbench already calls `$dumpfile`/`$dumpvars`, so each simulation
 generates a `.vcd` (Value Change Dump) waveform file in that experiment's
-directory (`01_half_adder.vcd`, `56_inverter_behavioral.vcd`, ...).
+directory (`01_half_adder.vcd`, `51_inverter_behavioral.vcd`, ...).
 
 **By default, these files are cleaned up after each test passes** to save disk
 space — they're easy to regenerate. To **keep** them for inspection:
@@ -89,14 +87,14 @@ Both details matter:
 
 This writes a `synth_<top_module>.v` netlist alongside the source. A few
 experiments declare more than one independent top-level module (e.g.
-`20_mux2to1_decoder2to4_tristate`); their script synthesizes each one in turn,
-resetting the design in between. `60_synthesis_yosys_counter` and
-`61_static_timing_analysis` are special cases — see
-[The two flow experiments](#the-two-flow-experiments) below.
+`19_mux2to1_decoder2to4_tristate`); their script synthesizes each one in turn,
+resetting the design in between. `54_synthesis_yosys_counter` is a special
+case — see [The synthesis flow experiment](#the-synthesis-flow-experiment)
+below.
 
 ## Running everything at once
 
-`run_experiments.py` walks all 55 experiments, auto-detecting each one's layout,
+`run_experiments.py` walks all 54 experiments, auto-detecting each one's layout,
 and prints a pass/fail summary. **RTL simulation only by default — synthesis is
 opt-in.** It's plain Python (stdlib only, no third-party packages) — no shell
 scripting, so it runs identically on Windows, macOS, and Linux:
@@ -113,7 +111,34 @@ non-zero if anything failed.
 
 ### Running with Crucible (`igny`)
 
-First-time setup — create the environment and workspace, then install the tools:
+**The fast path — reproduce the exact toolchain in one command.** This repo
+commits both `crucible.toml` (workspace identity and bound environment) and
+`crucible.lock` (pinned tool versions with checksums), so you don't have to
+install anything by hand:
+
+```bash
+git clone <this-repo>
+cd digital-design
+igny workspace sync
+```
+
+`sync` reads `crucible.lock`, installs any missing tools into your machine
+inventory, and binds them to the `digital-experiments` environment — creating
+that environment if it doesn't exist. Re-running it is idempotent. Then go
+straight to running experiments:
+
+```bash
+igny run script run_experiments.py
+```
+
+The lock currently pins `iverilog@12.0.0`, `gtkwave@3.3.120`, and
+`yosys@0.47.0`, all `windows-x86_64` artifacts. On Linux or macOS `sync` will
+resolve the same tools for your platform, but regenerate the lock with
+`igny workspace lock` afterwards if you want it to reflect your platform's
+artifacts.
+
+<details>
+<summary>Manual setup (if you'd rather not use the lock)</summary>
 
 ```bash
 igny env create digital-experiments
@@ -124,7 +149,6 @@ igny workspace create --path . --env digital-experiments
 igny tool install iverilog --version 12.0.0   # 14.0.0 has no windows-x64 build
 igny tool install gtkwave  --version 3.3.120  # 3.4.0 has no windows-x64 build
 igny tool install yosys    --version 0.47.0   # only needed for --synth
-igny tool install openroad                    # only needed for STA (experiment 61)
 ```
 
 **Pin these versions on Windows.** The catalog's newer defaults for `iverilog`,
@@ -132,6 +156,8 @@ igny tool install openroad                    # only needed for STA (experiment 
 `igny tool install <tool>` picks the newest version and fails with
 `not available for windows-x64`. Run `igny cache sync` to see the versions your
 machine can actually get. On Linux/macOS the bare form is fine.
+
+</details>
 
 Then, from this directory:
 
@@ -141,7 +167,7 @@ igny run script run_experiments.py -- --synth                   # simulation + s
 igny run script run_experiments.py -- --keep                    # keep .vcd/.vvp files
 igny run script run_experiments.py -- --keep --synth            # keep files + synthesis
 igny run script run_experiments.py -- 01_half_adder             # one experiment
-igny run script run_experiments.py -- --keep 56_inverter_behavioral
+igny run script run_experiments.py -- --keep 51_inverter_behavioral
 ```
 
 Script arguments **must** come after `--`; without it igny treats them as its own
@@ -151,7 +177,7 @@ shell hides your system `PATH`.
 
 ## Index
 
-### Arithmetic — adders (01–09, 11)
+### Arithmetic — adders (01–10)
 
 | # | Experiment | Layout |
 |---|---|---|
@@ -164,128 +190,109 @@ shell hides your system `PATH`.
 | 07 | `07_parallel_adder_subtractor` | design |
 | 08 | `08_adder_subtractor_4bit` | design |
 | 09 | `09_pipelined_adder_8bit` | design |
-| 11 | `11_three_number_adder` | named |
+| 10 | `10_three_number_adder` | named |
 
-### Arithmetic — comparators, multipliers, ALU (12–17)
-
-| # | Experiment | Layout |
-|---|---|---|
-| 12 | `12_comparator` | design |
-| 13 | `13_comparator_3bit` | design |
-| 14 | `14_multiplier` | design |
-| 15 | `15_multiplier_comparator` | design |
-| 16 | `16_alu` | design |
-| 17 | `17_arithmetic_adder_subtractor_comparator` | design |
-
-### Data routing — mux, demux, decoders, encoders (18–29, gaps at 21 and 27)
+### Arithmetic — comparators, multipliers, ALU (11–16)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 18 | `18_mux_8to1` | design |
-| 19 | `19_mux4to1` | design |
-| 20 | `20_mux2to1_decoder2to4_tristate` | design |
-| 22 | `22_pass_transistor_mux` | design |
-| 23 | `23_mux_encoder_decoder` | design |
-| 24 | `24_decoder_encoder` | design |
-| 25 | `25_demux_rom` | design |
-| 26 | `26_bcd_encoder_10bit` | design |
-| 28 | `28_seven_segment_decoder_rtl` | named |
-| 29 | `29_parity_generator` | design |
+| 11 | `11_comparator` | design |
+| 12 | `12_comparator_3bit` | design |
+| 13 | `13_multiplier` | design |
+| 14 | `14_multiplier_comparator` | design |
+| 15 | `15_alu` | design |
+| 16 | `16_arithmetic_adder_subtractor_comparator` | design |
 
-### Sequential — latches, flip-flops, registers (30–37)
+### Data routing — mux, demux, decoders, encoders (17–26)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 30 | `30_d_latch` | design |
-| 31 | `31_latch_and_flipflop` | design |
-| 32 | `32_d_flipflop_async_reset` | design |
-| 33 | `33_d_flipflop_negedge` | design |
-| 34 | `34_d_flipflop_with_qbar` | named |
-| 35 | `35_flipflop_modeling` | design |
-| 36 | `36_register` | design |
-| 37 | `37_dflipflop_shiftreg8bit` | design |
+| 17 | `17_mux_8to1` | design |
+| 18 | `18_mux4to1` | design |
+| 19 | `19_mux2to1_decoder2to4_tristate` | design |
+| 20 | `20_pass_transistor_mux` | design |
+| 21 | `21_mux_encoder_decoder` | design |
+| 22 | `22_decoder_encoder` | design |
+| 23 | `23_demux_rom` | design |
+| 24 | `24_bcd_encoder_10bit` | design |
+| 25 | `25_seven_segment_decoder_rtl` | named |
+| 26 | `26_parity_generator` | design |
 
-### Counters (38–43)
-
-| # | Experiment | Layout |
-|---|---|---|
-| 38 | `38_counter_4bit_sync_up` | design |
-| 39 | `39_counter_8bit_enable` | design |
-| 40 | `40_counter_4bit_up_down` | design |
-| 41 | `41_up_down_counter` | named |
-| 42 | `42_controlled_counter` | named |
-| 43 | `43_fsm_updown_counter` | design |
-
-### State machines and sequence detection (46–51)
+### Sequential — latches, flip-flops, registers (27–34)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 46 | `46_mealy_sequence_detector` | named |
-| 47 | `47_fsm_calling_bell` | design |
-| 48 | `48_fsm_state_machine` | design |
-| 49 | `49_edge_detector_moore` | design |
-| 50 | `50_edge_detector_mealy` | design |
-| 51 | `51_debouncer` | design |
+| 27 | `27_d_latch` | design |
+| 28 | `28_latch_and_flipflop` | design |
+| 29 | `29_d_flipflop_async_reset` | design |
+| 30 | `30_d_flipflop_negedge` | design |
+| 31 | `31_d_flipflop_with_qbar` | named |
+| 32 | `32_flipflop_modeling` | design |
+| 33 | `33_register` | design |
+| 34 | `34_dflipflop_shiftreg8bit` | design |
 
-### Memory (52)
-
-| # | Experiment | Layout |
-|---|---|---|
-| 52 | `52_fifo` | design |
-
-### Modeling styles and CMOS-level description (53–57)
+### Counters (35–40)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 53 | `53_gate_modeling` | design |
-| 54 | `54_dataflow_modeling` | design |
-| 55 | `55_behavioral_modeling` | design |
-| 56 | `56_inverter_behavioral` | design |
-| 57 | `57_cmos_gate_model` | design |
+| 35 | `35_counter_4bit_sync_up` | design |
+| 36 | `36_counter_8bit_enable` | design |
+| 37 | `37_counter_4bit_up_down` | design |
+| 38 | `38_up_down_counter` | named |
+| 39 | `39_controlled_counter` | named |
+| 40 | `40_fsm_updown_counter` | design |
 
-### RTL design and the synthesis flow (59–61)
+### State machines and sequence detection (41–46)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 59 | `59_rtl_design_example` | design |
-| 60 | `60_synthesis_yosys_counter` | yosys flow |
-| 61 | `61_static_timing_analysis` | STA flow |
+| 41 | `41_mealy_sequence_detector` | named |
+| 42 | `42_fsm_calling_bell` | design |
+| 43 | `43_fsm_state_machine` | design |
+| 44 | `44_edge_detector_moore` | design |
+| 45 | `45_edge_detector_mealy` | design |
+| 46 | `46_debouncer` | design |
 
-## The two flow experiments
+### Memory (47)
 
-**`60_synthesis_yosys_counter`** maps `top.v` to the Nangate open cell library and writes
-a gate-level netlist:
+| # | Experiment | Layout |
+|---|---|---|
+| 47 | `47_fifo` | design |
+
+### Modeling styles and CMOS-level description (48–52)
+
+| # | Experiment | Layout |
+|---|---|---|
+| 48 | `48_gate_modeling` | design |
+| 49 | `49_dataflow_modeling` | design |
+| 50 | `50_behavioral_modeling` | design |
+| 51 | `51_inverter_behavioral` | design |
+| 52 | `52_cmos_gate_model` | design |
+
+### RTL design and the synthesis flow (53–54)
+
+| # | Experiment | Layout |
+|---|---|---|
+| 53 | `53_rtl_design_example` | design |
+| 54 | `54_synthesis_yosys_counter` | yosys flow |
+
+## The synthesis flow experiment
+
+**`54_synthesis_yosys_counter`** maps `top.v` to the Nangate open cell library
+and writes a gate-level netlist:
 
 ```bash
-cd experiments/60_synthesis_yosys_counter
+cd experiments/54_synthesis_yosys_counter
 igny run yosys -s yosys_commands.tcl        # writes synth_example.v
 ```
 
-`NangateOpenCellLibrary_typical.lib` (6.7 MB) is committed so the flow runs out of the box;
-`toy.lib` is a small hand-written library for quicker experiments. A previously generated
-`synth_example.v` is included for reference and will be overwritten by the run.
+`NangateOpenCellLibrary_typical.lib` (6.4 MB) is committed so the flow runs out of
+the box; `toy.lib` is a small hand-written library for quicker experiments. Both are
+third-party teaching/reference libraries and keep their own upstream copyright.
 
 This experiment also has a `yosys_synthesis.tcl` alongside `yosys_commands.tcl` —
 that one is the plain lib-free generic-cell check (against `Mycounter.v`), separate
 from the Nangate-mapped ASIC flow above.
-
-**`61_static_timing_analysis`** runs timing analysis over `top.v` against `top.sdc` using OpenROAD:
-
-```bash
-cd experiments/61_static_timing_analysis
-igny run openroad -exit test.tcl
-```
-
-`top.v` here is already a gate-level netlist built from named library cells (`INV`,
-`BUF`, `NAND2`, `DFFRNQ`) that only `toy.lib` defines — there's no RTL to
-re-synthesize. Its `yosys_synthesis.tcl` just parses the netlist and reports cell
-counts rather than running a full synth pass.
-
-**Required tool for STA:** Install OpenROAD with:
-
-```bash
-igny tool install openroad
-```
 
 ## Documents
 

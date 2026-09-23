@@ -1,0 +1,39 @@
+{
+  "active_environment": "digital-experiments",
+  "environments": [
+    {
+      "name": "digital-experiments",
+      "stack": "default",
+      "tools": [
+        {
+          "artifact_id": "igny_windows-x64_gtkwave_3.3.120.0.tar.gz",
+          "checksum": "sha256:2cca576c5f2d9b93a396a135e34af37aa467a00fecc7687d5ae801544a0c74ff",
+          "enabled": true,
+          "name": "gtkwave",
+          "platform": "windows-x86_64",
+          "source": "artifact",
+          "version": "3.3.120"
+        },
+        {
+          "artifact_id": "igny_windows-x64_iverilog_12.0.0.0.tar.gz",
+          "checksum": "sha256:e8b56b401a905afadeae351d43bd314c9e53a43b79458247420ad0b9a366a785",
+          "enabled": true,
+          "name": "iverilog",
+          "platform": "windows-x86_64",
+          "source": "artifact",
+          "version": "12.0.0"
+        },
+        {
+          "artifact_id": "igny_windows-x64_yosys_0.47.0.0.tar.gz",
+          "checksum": "sha256:10c2b4847410309e7239b2a7486f94df4bb947090d0dd4f554ed2ae5610819c9",
+          "enabled": true,
+          "name": "yosys",
+          "platform": "windows-x86_64",
+          "source": "artifact",
+          "version": "0.47.0"
+        }
+      ]
+    }
+  ],
+  "schema_version": 1
+}
