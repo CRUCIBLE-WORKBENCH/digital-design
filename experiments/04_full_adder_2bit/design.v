@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/04_full_adder_2bit/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 module full_adder_1bit (
     input  wire a,
     input  wire b,

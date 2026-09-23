@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/24_decoder_encoder/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 // 3-to-8 decoder and 8-to-3 priority encoder
 
 module decoder_3to8(in, en, out);

@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/29_parity_generator/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 // 8-bit parity generator (parity_type: 0=even, 1=odd) and checker
 module parity_generator_8bit(
     input        [7:0] data,

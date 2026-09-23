@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/60_synthesis_yosys_counter/Testbench.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 module Testbench();
 	reg Clock, Reset;
 	wire [3:0]Count;

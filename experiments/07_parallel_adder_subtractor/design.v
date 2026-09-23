@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/07_parallel_adder_subtractor/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 // 4-bit adder/subtractor using XOR-based two's complement control
 
 module parallel_adder_subtractor_4bit(a, b, sub, result, cout);

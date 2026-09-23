@@ -1,3 +1,12 @@
+# ===============================================================================
+# Ignytion IO - CRUCIBLE CORE
+# Copyright (c) 2026 Ignytion IO. All rights reserved.
+# Author      : IGNYTION_TECH
+# File        : experiments/60_synthesis_yosys_counter/yosys_commands.tcl
+# Created     : 2026-09-23
+# Description : Digital design experiment source, configuration, or documentation file.
+# ===============================================================================
+
 # read modules from Verilog file
 read_verilog top.v
 

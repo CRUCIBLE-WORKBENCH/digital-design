@@ -1,34 +1,31 @@
 # Verilog Experiments
 
-61 self-contained digital design experiments, from single gates to a full
+55 self-contained digital design experiments, from single gates to a full
 synthesis-and-timing flow. Numbering is thematic: combinational arithmetic first,
 then data routing, sequential logic, state machines, memory, modeling styles, and
 finally the RTL-to-netlist flow.
 
-## Three layouts, three ways to run
+Everything here is plain Verilog (`.v`) simulated with Icarus Verilog, plus a
+Yosys `.tcl` synthesis check per experiment. Numbering has gaps where earlier
+SystemVerilog/VHDL experiments were removed; remaining experiments keep their
+original numbers.
 
-Experiments come in three shapes. Check which one you have with `ls`.
+## Two layouts, two ways to run
+
+Experiments come in two shapes. Check which one you have with `ls`.
 
 **1. `design.v` + `tb_design.v`** — the majority.
 
 ```bash
-cd 01_half_adder
+cd experiments/01_half_adder
 igny run iverilog -o sim.vvp design.v tb_design.v
 igny run vvp sim.vvp
 ```
 
-**2. `src/` + `tb/` + `Makefile`** — multi-language (Verilog, SystemVerilog, VHDL).
+**2. `<name>.v` + `<name>_tb.v`** — named-module walkthrough experiments.
 
 ```bash
-cd 27_seven_segment_decoder
-igny run make test          # iverilog sim, plus a GHDL syntax pass if ghdl is installed
-igny run make clean
-```
-
-**3. `<name>.v` + `<name>_tb.v`** — named-module walkthrough experiments.
-
-```bash
-cd 34_d_flipflop_with_qbar
+cd experiments/34_d_flipflop_with_qbar
 igny run iverilog -o sim.vvp dff.v dff_tb.v
 igny run vvp sim.vvp
 ```
@@ -36,11 +33,17 @@ igny run vvp sim.vvp
 Under Crucible, prefix with `igny run` (`igny run iverilog ...`, `igny run vvp ...`) or
 work inside `igny env shell`.
 
+**`cd` into the experiment first.** You *can* pass paths from the repo root
+(`igny run iverilog -o experiments/01_half_adder/sim experiments/01_half_adder/design.v ...`),
+but each testbench calls `$dumpfile("<name>.vcd")` with a relative path, so the
+waveform lands in whatever directory you launched from rather than beside the
+design. `igny run` launches the tool in your current directory.
+
 ## Waveforms
 
 Every testbench already calls `$dumpfile`/`$dumpvars`, so each simulation
 generates a `.vcd` (Value Change Dump) waveform file in that experiment's
-directory (`01_half_adder.vcd`, `27_seven_segment_decoder.vcd`, ...).
+directory (`01_half_adder.vcd`, `56_inverter_behavioral.vcd`, ...).
 
 **By default, these files are cleaned up after each test passes** to save disk
 space — they're easy to regenerate. To **keep** them for inspection:
@@ -53,9 +56,13 @@ igny run script run_experiments.py -- --keep   # via igny
 Then open a waveform:
 
 ```bash
+cd experiments/01_half_adder
 igny run gtkwave 01_half_adder.vcd
-igny run gtkwave 56_inverter_behavioral/56_inverter_behavioral.vcd
 ```
+
+GTKWave prints a stream of `GdkPixbuf ... assertion failed` warnings on Windows.
+They're cosmetic icon-loading complaints from the GTK build — the viewer opens
+and works normally. Ignore them.
 
 `.vcd` files are gitignored — they're reproducible output, not source.
 
@@ -66,22 +73,30 @@ the hierarchy, maps it to generic cells, and reports gate/wire stats — a quick
 "does this actually synthesize" check independent of simulation:
 
 ```bash
-cd 01_half_adder
+cd experiments/01_half_adder
 igny run yosys -s yosys_synthesis.tcl
 ```
+
+Both details matter:
+
+- **`-s` is required.** Without it, yosys sees the `.tcl` extension, routes the
+  file to its TCL interpreter, and fails with
+  `invalid command name "read_verilog"`. These are yosys scripts, not TCL
+  scripts — the extension is historical.
+- **Run from inside the experiment directory.** The scripts use relative paths
+  (`read_verilog design.v`), so running from the repo root fails with
+  ``File `design.v' not found``.
 
 This writes a `synth_<top_module>.v` netlist alongside the source. A few
 experiments declare more than one independent top-level module (e.g.
 `20_mux2to1_decoder2to4_tristate`); their script synthesizes each one in turn,
-resetting the design in between. The six Makefile-driven experiments run this
-against `src/design.sv` (with `-sv`) since that's their canonical source, so the
-module name in the script matches the SystemVerilog declaration, not the plain
-Verilog file. `60_synthesis_yosys_counter` and `61_static_timing_analysis` are
-special cases — see [The two flow experiments](#the-two-flow-experiments) below.
+resetting the design in between. `60_synthesis_yosys_counter` and
+`61_static_timing_analysis` are special cases — see
+[The two flow experiments](#the-two-flow-experiments) below.
 
 ## Running everything at once
 
-`run_experiments.py` walks all 61 experiments, auto-detecting each one's layout,
+`run_experiments.py` walks all 55 experiments, auto-detecting each one's layout,
 and prints a pass/fail summary. **RTL simulation only by default — synthesis is
 opt-in.** It's plain Python (stdlib only, no third-party packages) — no shell
 scripting, so it runs identically on Windows, macOS, and Linux:
@@ -98,16 +113,25 @@ non-zero if anything failed.
 
 ### Running with Crucible (`igny`)
 
-One-time tool setup (installs the tools and binds them to your environment):
+First-time setup — create the environment and workspace, then install the tools:
 
 ```bash
-igny tool install iverilog
-igny tool install yosys --version 0.47.0   # only needed for --synth
-igny tool install openroad                 # only needed for STA (experiment 61)
+igny env create digital-experiments
+igny workspace create --path . --env digital-experiments
 ```
 
-Pin yosys to `0.47.0` on Windows — the catalog's newer default has no
-`windows-x64` build and the install will fail.
+```bash
+igny tool install iverilog --version 12.0.0   # 14.0.0 has no windows-x64 build
+igny tool install gtkwave  --version 3.3.120  # 3.4.0 has no windows-x64 build
+igny tool install yosys    --version 0.47.0   # only needed for --synth
+igny tool install openroad                    # only needed for STA (experiment 61)
+```
+
+**Pin these versions on Windows.** The catalog's newer defaults for `iverilog`,
+`gtkwave`, and `yosys` have no `windows-x64` build, and a bare
+`igny tool install <tool>` picks the newest version and fails with
+`not available for windows-x64`. Run `igny cache sync` to see the versions your
+machine can actually get. On Linux/macOS the bare form is fine.
 
 Then, from this directory:
 
@@ -127,7 +151,7 @@ shell hides your system `PATH`.
 
 ## Index
 
-### Arithmetic — adders (01–11)
+### Arithmetic — adders (01–09, 11)
 
 | # | Experiment | Layout |
 |---|---|---|
@@ -140,7 +164,6 @@ shell hides your system `PATH`.
 | 07 | `07_parallel_adder_subtractor` | design |
 | 08 | `08_adder_subtractor_4bit` | design |
 | 09 | `09_pipelined_adder_8bit` | design |
-| 10 | `10_three_operand_adder` | make |
 | 11 | `11_three_number_adder` | named |
 
 ### Arithmetic — comparators, multipliers, ALU (12–17)
@@ -154,20 +177,18 @@ shell hides your system `PATH`.
 | 16 | `16_alu` | design |
 | 17 | `17_arithmetic_adder_subtractor_comparator` | design |
 
-### Data routing — mux, demux, decoders, encoders (18–29)
+### Data routing — mux, demux, decoders, encoders (18–29, gaps at 21 and 27)
 
 | # | Experiment | Layout |
 |---|---|---|
 | 18 | `18_mux_8to1` | design |
 | 19 | `19_mux4to1` | design |
 | 20 | `20_mux2to1_decoder2to4_tristate` | design |
-| 21 | `21_tri_state_mux4` | make |
 | 22 | `22_pass_transistor_mux` | design |
 | 23 | `23_mux_encoder_decoder` | design |
 | 24 | `24_decoder_encoder` | design |
 | 25 | `25_demux_rom` | design |
 | 26 | `26_bcd_encoder_10bit` | design |
-| 27 | `27_seven_segment_decoder` | make |
 | 28 | `28_seven_segment_decoder_rtl` | named |
 | 29 | `29_parity_generator` | design |
 
@@ -195,12 +216,10 @@ shell hides your system `PATH`.
 | 42 | `42_controlled_counter` | named |
 | 43 | `43_fsm_updown_counter` | design |
 
-### State machines and sequence detection (44–51)
+### State machines and sequence detection (46–51)
 
 | # | Experiment | Layout |
 |---|---|---|
-| 44 | `44_moore_fsm` | make |
-| 45 | `45_mealy_fsm` | make |
 | 46 | `46_mealy_sequence_detector` | named |
 | 47 | `47_fsm_calling_bell` | design |
 | 48 | `48_fsm_state_machine` | design |
@@ -214,7 +233,7 @@ shell hides your system `PATH`.
 |---|---|---|
 | 52 | `52_fifo` | design |
 
-### Modeling styles and CMOS-level description (53–58)
+### Modeling styles and CMOS-level description (53–57)
 
 | # | Experiment | Layout |
 |---|---|---|
@@ -223,7 +242,6 @@ shell hides your system `PATH`.
 | 55 | `55_behavioral_modeling` | design |
 | 56 | `56_inverter_behavioral` | design |
 | 57 | `57_cmos_gate_model` | design |
-| 58 | `58_cmos_nand_nor` | make |
 
 ### RTL design and the synthesis flow (59–61)
 
@@ -239,7 +257,7 @@ shell hides your system `PATH`.
 a gate-level netlist:
 
 ```bash
-cd 60_synthesis_yosys_counter
+cd experiments/60_synthesis_yosys_counter
 igny run yosys -s yosys_commands.tcl        # writes synth_example.v
 ```
 
@@ -254,7 +272,7 @@ from the Nangate-mapped ASIC flow above.
 **`61_static_timing_analysis`** runs timing analysis over `top.v` against `top.sdc` using OpenROAD:
 
 ```bash
-cd 61_static_timing_analysis
+cd experiments/61_static_timing_analysis
 igny run openroad -exit test.tcl
 ```
 
@@ -278,10 +296,3 @@ Whitepapers and the Crucible user guide are in [`crucible_docs/`](crucible_docs/
 - `Day2_Whitepaper.pdf` — the synthesis flow behind experiment 60
 - `Ignytion_Crucible_User_Guide_1.pdf`
 
-## Note on overlapping experiments
-
-A few designs appear twice in different coding styles — for example
-`27_seven_segment_decoder` (multi-language, Makefile-driven) and
-`28_seven_segment_decoder_rtl` (single-file walkthrough), or `10_three_operand_adder` and
-`11_three_number_adder`. This is intentional: the pairs are useful for comparing
-description styles for the same function.

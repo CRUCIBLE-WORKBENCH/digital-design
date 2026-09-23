@@ -1,3 +1,12 @@
+# ===============================================================================
+# Ignytion IO - CRUCIBLE CORE
+# Copyright (c) 2026 Ignytion IO. All rights reserved.
+# Author      : IGNYTION_TECH
+# File        : experiments/run_experiments.py
+# Created     : 2026-09-23
+# Description : Digital design experiment source, configuration, or documentation file.
+# ===============================================================================
+
 """Verilog Experiments -- RTL Simulation Runner.
 
 Compiles and simulates every experiment in this directory with
@@ -47,17 +56,11 @@ def find_experiments(only: str | None) -> list[Path]:
 
 
 def detect_layout(exp: Path) -> tuple[Path, Path] | None:
-    """Return (source, testbench) paths for the three known layouts, or None."""
+    """Return (source, testbench) paths for the two known layouts, or None."""
     design_v = exp / "design.v"
     tb_design_v = exp / "tb_design.v"
     if design_v.is_file() and tb_design_v.is_file():
         return design_v, tb_design_v
-
-    makefile = exp / "Makefile"
-    src_sv = exp / "src" / "design.sv"
-    tb_sv = exp / "tb" / "tb.sv"
-    if makefile.is_file() and src_sv.is_file() and tb_sv.is_file():
-        return src_sv, tb_sv
 
     tbs = sorted(exp.glob("*_tb.v"))
     if tbs:

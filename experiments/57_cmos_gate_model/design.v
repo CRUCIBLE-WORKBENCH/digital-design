@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/57_cmos_gate_model/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 // Behavioral model of CMOS-realized gates: NAND, NOR, XOR, XNOR
 
 module cmos_gates_behavioral(a, b, y_nand, y_nor, y_xor, y_xnor);

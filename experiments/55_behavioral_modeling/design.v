@@ -1,3 +1,12 @@
+// ===============================================================================
+// Ignytion IO - CRUCIBLE CORE
+// Copyright (c) 2026 Ignytion IO. All rights reserved.
+// Author      : IGNYTION_TECH
+// File        : experiments/55_behavioral_modeling/design.v
+// Created     : 2026-09-23
+// Description : Digital design experiment source, configuration, or documentation file.
+// ===============================================================================
+
 // Behavioral traffic light FSM: RED -> GREEN -> YELLOW -> RED
 
 module behavioral_traffic_fsm(clk, rst, red, yellow, green);
