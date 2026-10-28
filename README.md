@@ -303,3 +303,7 @@ Whitepapers and the Crucible user guide are in [`crucible_docs/`](crucible_docs/
 - `Day2_Whitepaper.pdf` — the synthesis flow behind experiment 60
 - `Ignytion_Crucible_User_Guide_1.pdf`
 
+### Locating an experiment
+
+Each experiment lives in its own numbered folder under `experiments/`, for example `experiments/01_half_adder`.
+
